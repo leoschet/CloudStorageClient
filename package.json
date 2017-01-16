@@ -1,0 +1,25 @@
+{
+  "name": "cloudstorageclient",
+  "version": "0.0.1",
+  "description": "Client application to consume and provide data to CloudStorage web service (Java)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leoschet/CloudStorageClient.git"
+  },
+  "author": "Leonardo Schettini (leoschet @ github)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leoschet/CloudStorageClient/issues"
+  },
+  "homepage": "https://github.com/leoschet/CloudStorageClient#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "ejs": "^2.5.5",
+    "express": "^4.14.0",
+    "request": "^2.79.0"
+  }
+}
