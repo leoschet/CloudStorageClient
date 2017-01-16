@@ -23,11 +23,7 @@ app.get('/', function(req, res){
 	res.render('index');
 });
 
-var xml = '<?xml version="1.0" encoding="utf-8"?>' +
-			'<Element>'+
-			'<Test>......</Test></Element>';
-
-app.get('/postVote', function(req, res){
+app.post('/postVote', function(req, res){
 
 	// var options = {
 	// 	method: 'POST',
@@ -53,8 +49,11 @@ app.get('/postVote', function(req, res){
 	res.redirect('/');
 });
 
-app.get('/sendXml', function(req, res){
+app.post('/sendXml', function(req, res){
 
+	var xml = '<?xml version="1.0" encoding="utf-8"?>' +
+			'<Element>'+
+			'<Test>......</Test></Element>';
 
 	var options = {
 		method: 'POST',
@@ -72,7 +71,7 @@ app.get('/sendXml', function(req, res){
 		}
 	});
 
-	// res.redirect('/');
+	res.redirect('/');
 });
 
 app.listen(port);
