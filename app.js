@@ -75,7 +75,7 @@ app.post('/sendXml', function(req, res){
 
 	var options = {
 		method: 'POST',
-		uri: 'http://localhost:8080/CloudStorage/storeFile',
+		uri: 'http://localhost:8080/CloudStorage/test',
 		body: xml,
 		headers: {'Content-Type': 'text/xml'},
 	};
@@ -99,36 +99,45 @@ app.post('/upload', function(req, res) {
 	
 	// Get file from HTML
 	var loader = req.files.loader;
-	// Get file size
-	var fileSizeInBytes = fs.statSync(loader.file)["size"]
 
-	var xml;
 	fs.createReadStream(loader.file).on('data', function(dataBuffer) {
 		// Parse file to xml
-		xml = js2xmlparser("Element", {
+		var xml = js2xmlparser.parse("Element", {
 			"key": loader.filename, // Get file name (including extension)
-			"data": dataBuffer.toString("utf-8", 0, fileSizeInBytes), // Read buffer from range
+			"data": JSON.stringify(dataBuffer.toJSON().data), // Read buffer from range
 		})
-		console.log(js2xmlparser);
-	});
 
-	// Set request options
-	var options = {
-		method: 'POST',
-		uri: 'http://localhost:8080/CloudStorage/storeFile',
-		body: xml,
-		headers: {'Content-Type': 'text/xml'},
-	};
-	
-	// Send request to web service
-	request(options, function (error, response, body) {
-		console.log('REQUEST DONE');
-		if (!error && response.statusCode == 200) {
-			// TODO: catch errors and set proper message to frontend (redirect/render properly)
-		}
-	});
+		var json = JSON.stringify({
+			"key": loader.filename, // Get file name (including extension)
+			"data": dataBuffer.toJSON().data,
+		})
 
-	res.redirect('/');
+		// console.log(xml);
+		// console.log(json);
+
+		// test with string
+		// fs.writeFile(loader.filename, dataBuffer, (err) => {
+		// 	if (err) throw err;
+		// 	console.log('It\'s saved!');
+		// });
+
+		// Set request options
+		var options = {
+			method: 'POST',
+			uri: 'http://localhost:8080/CloudStorage/storeFile',
+			body: xml,
+			headers: {'Content-Type': 'text/xml'},
+		};
+		
+		// Send request to web service
+		request(options, function (error, response, body) {
+			console.log('REQUEST DONE');
+			if (!error && response.statusCode == 200) {
+				// TODO: catch errors and set proper message to frontend (redirect/render properly)
+				res.redirect('/');
+			}
+		});
+	});
 
 });
 
