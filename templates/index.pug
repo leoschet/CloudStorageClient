@@ -1,0 +1,11 @@
+doctype html
+html(lang="en")
+	head
+		title= "Cloud Storage Client"
+		//- script(src='/js/nolo.js')
+		//- script(src='/socket.io/socket.io.js')
+	body
+		//- TODO: Make action change according to radio button, allowing to choose between .clouds file (database exported) or any other extention (single file to be storaged)
+		form(name="uploader", action="/upload", method="post", enctype="multipart/form-data")
+			input(type="file", name="loader")
+			input(type="submit" value="Upload")
