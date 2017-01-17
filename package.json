@@ -24,6 +24,7 @@
     "express-busboy": "^5.0.0",
     "fs": "0.0.1-security",
     "js2xmlparser": "^2.0.2",
+    "pug": "^2.0.0-beta6",
     "request": "^2.79.0"
   }
 }
