@@ -97,20 +97,22 @@ app.post('/sendXml', function(req, res){
 
 app.post('/upload', function(req, res) {
 	
-	console.log(loader);
-
+	// Get file from HTML
 	var loader = req.files.loader;
+	// Get file size
 	var fileSizeInBytes = fs.statSync(loader.file)["size"]
 
 	var xml;
 	fs.createReadStream(loader.file).on('data', function(dataBuffer) {
+		// Parse file to xml
 		xml = js2xmlparser("Element", {
-			"key": loader.filename,
-			"data": dataBuffer.toString("utf-8", 0, fileSizeInBytes);
+			"key": loader.filename, // Get file name (including extension)
+			"data": dataBuffer.toString("utf-8", 0, fileSizeInBytes), // Read buffer from range
 		})
 		console.log(js2xmlparser);
 	});
 
+	// Set request options
 	var options = {
 		method: 'POST',
 		uri: 'http://localhost:8080/CloudStorage/storeFile',
@@ -118,8 +120,7 @@ app.post('/upload', function(req, res) {
 		headers: {'Content-Type': 'text/xml'},
 	};
 	
-	console.log('SEND XML');
-
+	// Send request to web service
 	request(options, function (error, response, body) {
 		console.log('REQUEST DONE');
 		if (!error && response.statusCode == 200) {
