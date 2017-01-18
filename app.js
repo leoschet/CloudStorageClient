@@ -73,7 +73,7 @@ app.post('/sendXml', function(req, res){
 
 	var options = {
 		method: 'POST',
-		uri: 'http://localhost:8080/CloudStorage/test',
+		uri: 'http://localhost:8080/cloudstorage/test',
 		body: xml,
 		headers: {'Content-Type': 'text/xml'},
 	};
@@ -115,7 +115,7 @@ app.post('/upload', function(req, res) {
 		// Set request options
 		var options = {
 			method: 'POST',
-			uri: 'http://localhost:8080/CloudStorage/storeFile',
+			uri: 'http://localhost:8080/cloudstorage/storeFile',
 			body: xml,
 			headers: {'Content-Type': 'text/xml'},
 		};
@@ -148,8 +148,9 @@ app.post('/getFile', function(req, res) {
 					console.log(xmlObj);
 					console.log(xmlObj.Element.Data);
 					console.log(xmlObj.Element.Data[0]);
-					const buf = Buffer.from(xmlObj.Data);
-					fs.writeFile(__dirname + '/downloads/' + req.body.filename, xmlObj.Data, (err) => {
+					const buf = Buffer.from(xmlObj.Element.Data[0]);
+					console.log(buf);
+					fs.writeFile(__dirname + '/downloads/' + req.body.filename, buf.toString(), (err) => {
 						if (err) throw err;
 						console.log('It\'s saved!');
 					});
@@ -183,7 +184,7 @@ app.post('/deleteFile', function(req, res) {
 app.post('/exportDatabase', function(req, res) {
 
 	request
-		.get('http://localhost:8080/CloudStorage/exportDatabase')
+		.get('http://localhost:8080/cloudstorage/exportDatabase')
 		.on('response', function(response) {
 			
 			console.log('RESPONSE');
@@ -230,7 +231,7 @@ app.post('/importDatabase', function(req, res) {
 		// Set request options
 		var options = {
 			method: 'POST',
-			uri: 'http://localhost:8080/CloudStorage/importDatabase',
+			uri: 'http://localhost:8080/cloudstorage/importDatabase',
 			body: xml,
 			headers: {'Content-Type': 'text/xml'},
 		};
