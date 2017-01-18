@@ -133,7 +133,7 @@ app.post('/upload', function(req, res) {
 app.post('/getFile', function(req, res) {
 	console.log('AEE ' + req.body.filename);
 	request
-		.get('http://localhost:8080/CloudStorage/getFile/?key=' + req.body.filename)
+		.get('http://localhost:8080/cloudstorage/getFile/?key=' + req.body.filename)
 		.on('response', function(response) {
 			
 			console.log('RESPONSE');
@@ -146,8 +146,8 @@ app.post('/getFile', function(req, res) {
 				{
 					console.log('AFTER PARSE');
 					console.log(xmlObj);
-					console.log(xmlObj.Data);
-					console.log(xmlObj.Data[0]);
+					console.log(xmlObj.Element.Data);
+					console.log(xmlObj.Element.Data[0]);
 					const buf = Buffer.from(xmlObj.Data);
 					fs.writeFile(__dirname + '/downloads/' + req.body.filename, xmlObj.Data, (err) => {
 						if (err) throw err;
@@ -167,7 +167,7 @@ app.post('/deleteFile', function(req, res) {
 //onsubmit="return updateLoaderAction()"
 	console.log('AEE ' + req.body.filename);
 	request
-		.get('http://localhost:8080/CloudStorage/delete/?key=' + req.body.filename)
+		.get('http://localhost:8080/cloudstorage/delete/?key=' + req.body.filename)
 		.on('response', function(response) {
 			
 			console.log('RESPONSE');
