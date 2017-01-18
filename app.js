@@ -101,23 +101,16 @@ app.post('/upload', function(req, res) {
 	fs.createReadStream(fileloader.file).on('data', function(dataBuffer) {
 		// Parse file to xml
 		var xml = js2xmlparser.parse("Element", {
-			"key": fileloader.filename, // Get file name (including extension)
-			"data": JSON.stringify(dataBuffer.toJSON().data), // Read buffer from range
+			"Key": fileloader.filename, // Get file name (including extension)
+			"Data": JSON.stringify(dataBuffer.toJSON().data), // Read buffer from range
 		})
 
 		var json = JSON.stringify({
-			"key": fileloader.filename, // Get file name (including extension)
-			"data": dataBuffer.toJSON().data,
+			"Key": fileloader.filename, // Get file name (including extension)
+			"Data": dataBuffer.toJSON().data,
 		})
 
-		// console.log(xml);
-		// console.log(json);
-
-		// test with string
-		// fs.writeFile(fileloader.filename, dataBuffer, (err) => {
-		// 	if (err) throw err;
-		// 	console.log('It\'s saved!');
-		// });
+		console.log(xml);
 
 		// Set request options
 		var options = {
@@ -130,10 +123,8 @@ app.post('/upload', function(req, res) {
 		// Send request to web service
 		request(options, function (error, response, body) {
 			console.log('REQUEST DONE');
-			if (!error && response.statusCode == 200) {
-				// TODO: catch errors and set proper message to frontend (redirect/render properly)
-				res.redirect('/');
-			}
+			console.log(response.statusCode)
+			res.redirect('/');
 		});
 	});
 
@@ -147,18 +138,18 @@ app.post('/getFile', function(req, res) {
 			
 			console.log('RESPONSE');
 			console.log(response.statusCode); // 200 
-			if (response.statusCode == 200) {
-				// TODO: catch errors and set proper message to frontend (redirect/render properly)
-				res.redirect('/');
-			}
-
+			res.redirect('/');
 		})
 		.on('data', function(data) {
-			xml2jsparser.parseString(data, function (err, data) {
+			xml2jsparser.parseString(data, function (err, xmlObj) {
 				if(!err)
 				{
-					console.dir(data);
-					fs.writeFile('/downloads/' + req.body.filename, data, (err) => {
+					console.log('AFTER PARSE');
+					console.log(xmlObj);
+					console.log(xmlObj.Data);
+					console.log(xmlObj.Data[0]);
+					const buf = Buffer.from(xmlObj.Data);
+					fs.writeFile(__dirname + '/downloads/' + req.body.filename, xmlObj.Data, (err) => {
 						if (err) throw err;
 						console.log('It\'s saved!');
 					});
@@ -232,8 +223,8 @@ app.post('/importDatabase', function(req, res) {
 	fs.createReadStream(fileloader.file).on('data', function(dataBuffer) {
 		// Parse file to xml
 		var xml = js2xmlparser.parse("Element", {
-			"key": fileloader.filename, // Get file name (including extension)
-			"data": JSON.stringify(dataBuffer.toJSON().data), // Read buffer from range
+			"Key": fileloader.filename, // Get file name (including extension)
+			"Data": JSON.stringify(dataBuffer.toJSON().data), // Read buffer from range
 		})
 
 		// Set request options
