@@ -39,7 +39,7 @@ app.post('/postVote', function(req, res){
 	// };
 	
 	request
-		.post('http://localhost:8080/EuroCupWS-CC16/restapi/postVote/6')
+		.post('http://localhost:9000/EuroCupWS-CC16/restapi/postVote/6')
 		.on('response', function(response) { console.log(response.statusCode); })
 		.pipe(request
 				.get('http://localhost:8080/EuroCupWS-CC16/restapi/readId/6')
@@ -116,7 +116,7 @@ app.post('/upload', function(req, res) {
 		// Set request options
 		var options = {
 			method: 'POST',
-			uri: 'http://localhost:8080/CloudStorage/storeFile',
+			uri: 'http://cloudstorage-ws.herokuapp.com/storeFile',
 			body: xml,
 			headers: {'Content-Type': 'text/xml'},
 		};
@@ -134,7 +134,7 @@ app.post('/upload', function(req, res) {
 app.post('/getFile', function(req, res) {
 	console.log('AEE ' + req.body.filename);
 	request
-		.get('http://localhost:8080/CloudStorage/getFile/?key=' + req.body.filename)
+		.get('http://cloudstorage-ws.herokuapp.com/getFile/?key=' + req.body.filename)
 		.on('response', function(response) {
 			
 			console.log('RESPONSE');
@@ -185,7 +185,7 @@ app.post('/getFile', function(req, res) {
 app.post('/getFiles', function(req, res) {
 	console.log('AEE ' + req.body.filename);
 	request
-		.get('http://localhost:8080/CloudStorage/getFiles/?firstKey=' + req.body.filenameStart + '&lastKey=' + req.body.filenameEnd)
+		.get('http://cloudstorage-ws.herokuapp.com/getFiles/?firstKey=' + req.body.filenameStart + '&lastKey=' + req.body.filenameEnd)
 		.on('response', function(response) {
 			
 			console.log('RESPONSE');
@@ -239,7 +239,7 @@ app.post('/deleteFile', function(req, res) {
 //onsubmit="return updateLoaderAction()"
 	console.log('AEE ' + req.body.filename);
 	request
-		.get('http://localhost:8080/cloudstorage/delete/?key=' + req.body.filename)
+		.get('http://cloudstorage-ws.herokuapp.com/delete/?key=' + req.body.filename)
 		.on('response', function(response) {
 			
 			console.log('RESPONSE');
@@ -255,7 +255,7 @@ app.post('/deleteFile', function(req, res) {
 app.post('/exportDatabase', function(req, res) {
 
 	request
-		.get('http://localhost:8080/cloudstorage/exportDatabase')
+		.get('http://cloudstorage-ws.herokuapp.com/exportDatabase')
 		.on('response', function(response) {
 			
 			console.log('RESPONSE');
@@ -302,7 +302,7 @@ app.post('/importDatabase', function(req, res) {
 		// Set request options
 		var options = {
 			method: 'POST',
-			uri: 'http://localhost:8080/cloudstorage/importDatabase',
+			uri: 'http://cloudstorage-ws.herokuapp.com/importDatabase',
 			body: xml,
 			headers: {'Content-Type': 'text/xml'},
 		};
