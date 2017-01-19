@@ -23,6 +23,11 @@ html(lang="en")
 			input(type="text", name="filename")
 			input(type="submit" value="Get File")
 
+		form(name="downloader", action="/getFiles", method="post")
+			input(type="text", name="filenameStart")
+			input(type="text", name="filenameEnd")
+			input(type="submit" value="Get File")
+
 		form(name="delete", action="/deleteFile", method="post")
 			input(type="text", name="filename")
 			input(type="submit" value="Delete File")

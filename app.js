@@ -104,18 +104,19 @@ app.post('/upload', function(req, res) {
 			"Key": fileloader.filename, // Get file name (including extension)
 			"Data": JSON.stringify(dataBuffer.toJSON().data), // Read buffer from range
 		})
-
 		var json = JSON.stringify({
 			"Key": fileloader.filename, // Get file name (including extension)
 			"Data": dataBuffer.toJSON().data,
 		})
 
-		console.log(xml);
-
+		// txt: <Buffer 50 6f 6b 65 72 53 74 61 72 73 20 48 61 6e 64 20 23 31 33 39 35 37 39 33 34 34 36 37 39 3a 20 20 48 6f 6c 64 27 65 6d 20 4e 6f 20 4c 69 6d 69 74 20 28 ... >
+		// pdf: <Buffer 25 50 44 46 2d 31 2e 37 0d 0a 25 a1 b3 c5 d7 0d 0a 31 20 30 20 6f 62 6a 0d 0a 3c 3c 2f 43 6f 75 6e 74 20 31 2f 4b 69 64 73 5b 20 36 20 30 20 52 20 5d ... >
+		console.log(dataBuffer);
+		
 		// Set request options
 		var options = {
 			method: 'POST',
-			uri: 'http://localhost:8080/cloudstorage/storeFile',
+			uri: 'http://localhost:8080/CloudStorage/storeFile',
 			body: xml,
 			headers: {'Content-Type': 'text/xml'},
 		};
@@ -133,7 +134,7 @@ app.post('/upload', function(req, res) {
 app.post('/getFile', function(req, res) {
 	console.log('AEE ' + req.body.filename);
 	request
-		.get('http://localhost:8080/cloudstorage/getFile/?key=' + req.body.filename)
+		.get('http://localhost:8080/CloudStorage/getFile/?key=' + req.body.filename)
 		.on('response', function(response) {
 			
 			console.log('RESPONSE');
@@ -141,14 +142,30 @@ app.post('/getFile', function(req, res) {
 			res.redirect('/');
 		})
 		.on('data', function(data) {
+			
+			// txt: <Buffer 3c 3f 78 6d 6c 20 76 65 72 73 69 6f 6e 3d 22 31 2e 30 22 20 65 6e 63 6f 64 69 6e 67 3d 22 55 54 46 2d 38 22 20 73 74 61 6e 64 61 6c 6f 6e 65 3d 22 79 ... >
+			// pdf: <Buffer 3c 3f 78 6d 6c 20 76 65 72 73 69 6f 6e 3d 22 31 2e 30 22 20 65 6e 63 6f 64 69 6e 67 3d 22 55 54 46 2d 38 22 20 73 74 61 6e 64 61 6c 6f 6e 65 3d 22 79 ... >
+			console.log(data);
+			
 			xml2jsparser.parseString(data, function (err, xmlObj) {
 				if(!err)
 				{
 					console.log('AFTER PARSE');
 					console.log(xmlObj);
-					console.log(xmlObj.Element.Data);
-					console.log(xmlObj.Element.Data[0]);
-					const buf = Buffer.from(xmlObj.Element.Data[0]);
+					// console.log(xmlObj.Element.Data);
+					// console.log(xmlObj.Element.Data[0]); // eh um json
+					
+					var dataObj = JSON.parse(xmlObj.Element.Data[0]);
+					
+					// console.log(dataObj);
+					// console.log(dataObj[0]);
+					// console.log(dataObj[1]);
+					// console.log(dataObj[2]);
+					// console.log(dataObj[3]);
+					
+					const buf = Buffer.from(dataObj);
+					
+					// <Buffer 50 6f 6b 65 72 53 74 61 72 73 20 48 61 6e 64 20 23 31 33 39 35 37 39 33 34 34 36 37 39 3a 20 20 48 6f 6c 64 27 65 6d 20 4e 6f 20 4c 69 6d 69 74 20 28 ... >
 					console.log(buf);
 					fs.writeFile(__dirname + '/downloads/' + req.body.filename, buf.toString(), (err) => {
 						if (err) throw err;
@@ -156,6 +173,60 @@ app.post('/getFile', function(req, res) {
 					});
 
 				} else{
+					console.log('bugou')
+					console.log(err);
+				}
+			});
+			
+			
+		});
+});
+
+app.post('/getFiles', function(req, res) {
+	console.log('AEE ' + req.body.filename);
+	request
+		.get('http://localhost:8080/CloudStorage/getFiles/?firstKey=' + req.body.filenameStart + '&lastKey=' + req.body.filenameEnd)
+		.on('response', function(response) {
+			
+			console.log('RESPONSE');
+			console.log(response.statusCode); // 200 
+			res.redirect('/');
+		})
+		.on('data', function(data) {
+			
+			// txt: <Buffer 3c 3f 78 6d 6c 20 76 65 72 73 69 6f 6e 3d 22 31 2e 30 22 20 65 6e 63 6f 64 69 6e 67 3d 22 55 54 46 2d 38 22 20 73 74 61 6e 64 61 6c 6f 6e 65 3d 22 79 ... >
+			// pdf: <Buffer 3c 3f 78 6d 6c 20 76 65 72 73 69 6f 6e 3d 22 31 2e 30 22 20 65 6e 63 6f 64 69 6e 67 3d 22 55 54 46 2d 38 22 20 73 74 61 6e 64 61 6c 6f 6e 65 3d 22 79 ... >
+			console.log(data);
+			
+			xml2jsparser.parseString(data, function (err, xmlObj) {
+				if(!err)
+				{
+					console.log('AFTER PARSE');
+					console.log(xmlObj);
+					console.log(xmlObj.Bucket.Element);
+					console.log(xmlObj.Bucket.Element[0]); 
+					console.log(xmlObj.Bucket.Element[1]); 
+					
+					// var dataObj = JSON.parse(xmlObj.Element.Data[0]);
+
+					var buf;
+					var dataObj;
+					for (var i = xmlObj.Bucket.Element.length - 1; i >= 0; i--) {
+						dataObj = JSON.parse(xmlObj.Bucket.Element[i].Data);
+
+						buf = Buffer.from(dataObj);
+					
+						// <Buffer 50 6f 6b 65 72 53 74 61 72 73 20 48 61 6e 64 20 23 31 33 39 35 37 39 33 34 34 36 37 39 3a 20 20 48 6f 6c 64 27 65 6d 20 4e 6f 20 4c 69 6d 69 74 20 28 ... >
+						console.log(buf);
+						fs.writeFile(__dirname + '/downloads/' + xmlObj.Bucket.Element[i].Key, buf.toString(), (err) => {
+							if (err) throw err;
+							console.log('It\'s saved!');
+						});
+					}
+					
+
+				} else{
+					console.log('bugou')
 					console.log(err);
 				}
 			});
