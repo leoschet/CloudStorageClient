@@ -169,7 +169,7 @@ app.post('/getFile', function(req, res) {
 					
 					// <Buffer 50 6f 6b 65 72 53 74 61 72 73 20 48 61 6e 64 20 23 31 33 39 35 37 39 33 34 34 36 37 39 3a 20 20 48 6f 6c 64 27 65 6d 20 4e 6f 20 4c 69 6d 69 74 20 28 ... >
 					console.log(buf);
-					fs.writeFile(__dirname + '/downloads/' + req.body.filename, buf.toString(), (err) => {
+					fs.writeFile(__dirname + '/downloads/' + req.body.filename, buf.toString(), function(err) {
 						if (err) throw err;
 						console.log('It\'s saved!');
 					});
@@ -220,7 +220,7 @@ app.post('/getFiles', function(req, res) {
 					
 						// <Buffer 50 6f 6b 65 72 53 74 61 72 73 20 48 61 6e 64 20 23 31 33 39 35 37 39 33 34 34 36 37 39 3a 20 20 48 6f 6c 64 27 65 6d 20 4e 6f 20 4c 69 6d 69 74 20 28 ... >
 						console.log(buf);
-						fs.writeFile(__dirname + '/downloads/' + xmlObj.Bucket.Element[i].Key, buf.toString(), (err) => {
+						fs.writeFile(__dirname + '/downloads/' + xmlObj.Bucket.Element[i].Key, buf.toString(), function(err){
 							if (err) throw err;
 							console.log('It\'s saved!');
 						});
@@ -275,7 +275,7 @@ app.post('/exportDatabase', function(req, res) {
 					var today = new Date();
 
 					console.dir(data);
-					fs.writeFile('/downloads/database_backup' + today.now(), data, (err) => {
+					fs.writeFile('/downloads/database_backup' + today.now(), data, function(err){
 						if (err) throw err;
 						console.log('It\'s saved!');
 					});
