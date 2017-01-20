@@ -116,7 +116,7 @@ app.post('/upload', function(req, res) {
 		// Set request options
 		var options = {
 			method: 'POST',
-			uri: 'http://cloudstorage-ws.herokuapp.com/storeFile',
+			uri: 'https://cloudstorage-ws.herokuapp.com/cloudstorage/storeFile',
 			body: xml,
 			headers: {'Content-Type': 'text/xml'},
 		};
@@ -134,7 +134,7 @@ app.post('/upload', function(req, res) {
 app.post('/getFile', function(req, res) {
 	console.log('AEE ' + req.body.filename);
 	request
-		.get('http://cloudstorage-ws.herokuapp.com/getFile/?key=' + req.body.filename)
+		.get('https://cloudstorage-ws.herokuapp.com/cloudstorage/getFile/?key=' + req.body.filename)
 		.on('response', function(response) {
 			
 			console.log('RESPONSE');
@@ -185,7 +185,7 @@ app.post('/getFile', function(req, res) {
 app.post('/getFiles', function(req, res) {
 	console.log('AEE ' + req.body.filename);
 	request
-		.get('http://cloudstorage-ws.herokuapp.com/getFiles/?firstKey=' + req.body.filenameStart + '&lastKey=' + req.body.filenameEnd)
+		.get('https://cloudstorage-ws.herokuapp.com/cloudstorage/getFiles/?firstKey=' + req.body.filenameStart + '&lastKey=' + req.body.filenameEnd)
 		.on('response', function(response) {
 			
 			console.log('RESPONSE');
@@ -239,7 +239,7 @@ app.post('/deleteFile', function(req, res) {
 //onsubmit="return updateLoaderAction()"
 	console.log('AEE ' + req.body.filename);
 	request
-		.get('http://cloudstorage-ws.herokuapp.com/delete/?key=' + req.body.filename)
+		.post('https://cloudstorage-ws.herokuapp.com/cloudstorage/delete/?key=' + req.body.filename)
 		.on('response', function(response) {
 			
 			console.log('RESPONSE');
@@ -255,7 +255,7 @@ app.post('/deleteFile', function(req, res) {
 app.post('/exportDatabase', function(req, res) {
 
 	request
-		.get('http://cloudstorage-ws.herokuapp.com/exportDatabase')
+		.get('https://cloudstorage-ws.herokuapp.com/cloudstorage/exportDatabase')
 		.on('response', function(response) {
 			
 			console.log('RESPONSE');
@@ -302,7 +302,7 @@ app.post('/importDatabase', function(req, res) {
 		// Set request options
 		var options = {
 			method: 'POST',
-			uri: 'http://cloudstorage-ws.herokuapp.com/importDatabase',
+			uri: 'https://cloudstorage-ws.herokuapp.com/cloudstorage/importDatabase',
 			body: xml,
 			headers: {'Content-Type': 'text/xml'},
 		};
